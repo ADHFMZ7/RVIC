@@ -13,10 +13,10 @@ i32 main(int argc, char **argv)
 	core cpu;
 
 	u8 *memory = (u8 *) malloc (sizeof(u8) * 1024);
-	memory[0] = 0xFF;
-	memory[1] = 0x00;
-	memory[2] = 0xF1;
-	memory[3] = 0x13;
+	memory[0] = 0b00000000;
+	memory[1] = 0b10110101;
+	memory[2] = 0b00000101;
+	memory[3] = 0b00111011;
 
 
 	// initialize registers
@@ -41,11 +41,21 @@ i32 main(int argc, char **argv)
 		u32 instruction = 0;
 
 		for (int i = 0; i < 4; i++) instruction += memory[cpu.pc++] << (8 * (3-i));
-		
-		u8 opcode = 0x7F & instruction;
+			
+
 
 		// decode
 
+		u8 opcode = 0x0000007F & instruction;
+
+		if (opcode == 0b0110011) // R Format
+		{
+			u8 rd;	
+			u8 funct3;
+			u8 rs1;
+			u8 rs2;
+			u8 funct7;
+		}
 
 		// execute
 
