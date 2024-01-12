@@ -5,7 +5,12 @@
 
 #define address_space 1024*1024*1024*4
 
-i32 main(int argc, char **argv)
+u32 extract_bits(u32 instruction, u8 start_bit, u8 num_bits) {
+	u32 bitmask = ((1U << num_bits) - 1) << start_bit;
+	return (instruction & bitmask) >> start_bit;
+}
+
+i32 main(i32 argc, byte **argv)
 {
 
 	// initialize memory space	
@@ -13,10 +18,16 @@ i32 main(int argc, char **argv)
 	core cpu;
 
 	u8 *memory = (u8 *) malloc (sizeof(u8) * 1024);
-	memory[0] = 0b00000000;
-	memory[1] = 0b10110101;
-	memory[2] = 0b00000101;
-	memory[3] = 0b00111011;
+	// memory[0] = 0b00000000;
+	// memory[1] = 0b10110101;
+	// memory[2] = 0b00000101;
+	// memory[3] = 0b00111011;
+
+	memory[0] = 0x3e;
+	memory[1] = 0x80;
+	memory[2] = 0x00;
+	memory[3] = 0x93;
+
 
 
 	// initialize registers
@@ -36,26 +47,43 @@ i32 main(int argc, char **argv)
 		// fetch
 
 
-		// 0x FF 00 F1 13
-
 		u32 instruction = 0;
 
 		for (int i = 0; i < 4; i++) instruction += memory[cpu.pc++] << (8 * (3-i));
 			
-
-
 		// decode
 
-		u8 opcode = 0x0000007F & instruction;
+		u8 opcode = extract_bits(instruction, 0, 7);
+		u8 rd     = extract_bits(instruction, 7, 5);
+
+		printf("OP: %x\n", opcode);
+		printf("RD: %x\n", rd);
 
 		if (opcode == 0b0110011) // R Format
 		{
-			u8 rd;	
-			u8 funct3;
-			u8 rs1;
-			u8 rs2;
-			u8 funct7;
+			u8 funct3 = extract_bits(instruction, 12, 3);
+			u8 rs1    = extract_bits(instruction, 15, 5);
+			u8 rs2    = extract_bits(instruction, 20, 5);
+			u8 funct7 = extract_bits(instruction, 25, 7);
+
 		}
+		else if (opcode == 0b0010011) // I format 
+		{
+			u8 funct3 = extract_bits(instruction, 12, 3);
+			u8 rs1 = extract_bits(instruction, 15, 5);
+			u16 imm = extract_bits(instruction, 20, 12);
+
+			printf("%d, %d, %d, %d, %d\n", opcode, rd, funct3, rs1, imm);
+		}
+		else if (opcode == 0b0000011) // I format load
+		{
+
+		}
+		else if (opcode == 0b01)
+		{
+
+		}
+		
 
 		// execute
 
