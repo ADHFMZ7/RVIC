@@ -9,3 +9,6 @@ For the base ISA and most of the standard extensions, RISC-V uses a 32-bit fixed
 
 ### Processor state
 The RV32I Architecture has 31 general-purpose registers as well as the PC register. The 
+
+### Instruction Formats
+RISC-V has 6 different instruction formats. These formats each interpret the different fields of the 32 bits in different ways. They all reserve the first 7 bits for the opcode.
