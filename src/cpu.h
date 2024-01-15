@@ -10,7 +10,8 @@ typedef struct core
 	u32 *x;
 	
 	// memory
-	
+	u8 *memory;
+
 } core;
 
 #endif

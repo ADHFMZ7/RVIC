@@ -17,18 +17,17 @@ i32 main(i32 argc, byte **argv)
 
 	core cpu;
 
-	u8 *memory = (u8 *) malloc (sizeof(u8) * 1024);
+	cpu.memory = (u8 *) malloc (sizeof(u8) * 1024);
+	
 	// memory[0] = 0b00000000;
 	// memory[1] = 0b10110101;
 	// memory[2] = 0b00000101;
 	// memory[3] = 0b00111011;
 
-	memory[0] = 0x3e;
-	memory[1] = 0x80;
-	memory[2] = 0x00;
-	memory[3] = 0x93;
-
-
+	cpu.memory[0] = 0x3e;
+	cpu.memory[1] = 0x80;
+	cpu.memory[2] = 0x00;
+	cpu.memory[3] = 0x93;
 
 	// initialize registers
 	cpu.pc = 0;
@@ -49,7 +48,7 @@ i32 main(i32 argc, byte **argv)
 
 		u32 instruction = 0;
 
-		for (int i = 0; i < 4; i++) instruction += memory[cpu.pc++] << (8 * (3-i));
+		for (int i = 0; i < 4; i++) instruction += cpu.memory[cpu.pc++] << (8 * (3-i));
 			
 		// decode
 
