@@ -58,7 +58,7 @@ i32 main(i32 argc, byte **argv)
 
 	u8 running = 2;
 
-	while (running)
+	while (running--)
 	{
 		// Make sure zero register is maintained.
 		cpu.x[0] = 0;
@@ -76,7 +76,7 @@ i32 main(i32 argc, byte **argv)
 		u8 opcode = extract_bits(instruction, 0, 7);
 		u8 rd     = extract_bits(instruction, 7, 5);
 
-		if (opcode == 0b0110011) // R Format
+		if (opcode == 0b0110011) // R Type 
 		{
 			u8 funct3 = extract_bits(instruction, 12, 3);
 			u8 rs1    = extract_bits(instruction, 15, 5);
@@ -96,31 +96,51 @@ i32 main(i32 argc, byte **argv)
 			else if (funct3 == 0x1 && funct7 == 0x0)  // SLL
 				cpu.x[rd] = cpu.x[rs1] << cpu.x[rs2];	
 			else if (funct3 == 0x5 && funct7 == 0x0)  // SRL
-			{ // TODO: TEST THESE 
 				cpu.x[rd] = cpu.x[rs1] >> cpu.x[rs2];	
-				printf("SRL ");
-			}
 			else if (funct3 == 0x5 && funct7 == 0x20)  // SRA
-			{
 				cpu.x[rd] = ((i32)cpu.x[rs1]) >> cpu.x[rs2];	
-				printf("SRA");
-			}
-			printf("x%d, x%d, x%d\n", rd, rs1, rs2);
-			printf("Answer: %x\n", cpu.x[rd]);
+			else if (funct3 == 0x2 && funct7 == 0x0)  // SLT 
+				cpu.x[rd] = (cpu.x[rs1] < cpu.x[rs2]) ? 0 : 1;	
+			else if (funct3 == 0x3 && funct7 == 0x0)  // SLTU
+				cpu.x[rd] = ((i32)cpu.x[rs1] < (i32)cpu.x[rs2]) ? 0 : 1;	
 		}
 
 		else if (opcode == 0b0010011) // I format 
 		{
 			u8 funct3 = extract_bits(instruction, 12, 3);
-			u8 rs1 = extract_bits(instruction, 15, 5);
-			u16 imm = extract_bits(instruction, 20, 12);
+			u8 rs1    = extract_bits(instruction, 15, 5);
+			u16 imm   = extract_bits(instruction, 20, 12);
 
-			
+			u8 imm_2  = extract_bits(instruction, 20, 5);
+			u8 funct7 = extract_bits(instruction, 25, 7);
 
-			printf("%d, %d, %d, %d, %d\n", opcode, rd, funct3, rs1, imm);
+			if (funct3 == 0x0)												 // ADDI
+				cpu.x[rd] = cpu.x[rs1] + imm;	
+			else if (funct3 == 0x7)										 // ANDI
+				cpu.x[rd] = cpu.x[rs1] & imm;	
+			else if (funct3 == 0x6)										 // ORI 
+				cpu.x[rd] = cpu.x[rs1] | imm;	
+			else if (funct3 == 0x4)										 // XORI
+				cpu.x[rd] = cpu.x[rs1] ^ imm;	
+			else if (funct3 == 0x1)										 // SLLI
+				cpu.x[rd] = cpu.x[rs1]  << imm_2;
+			else if (funct3 == 0x5 && funct7 == 0x0)   // SRLI 
+				cpu.x[rd] = cpu.x[rs1]  >> imm_2;
+			else if (funct3 == 0x5 && funct7 == 0x20)  // SRAI 
+				cpu.x[rd] = (i32) cpu.x[rs1]  >> imm_2;
+			else if (funct3 == 0x5)										 // SLTI 
+				cpu.x[rd] = (cpu.x[rs1] < imm) ? 1 : 0;
+			else if (funct3 == 0x5)										 // SLTIU	 
+				cpu.x[rd] = ((i32)cpu.x[rs1] < (i32) imm) ? 1 : 0;
 		}
 		else if (opcode == 0b0000011) // I format load
 		{
+			u8 funct3 = extract_bits(instruction, 12, 3);
+			u8 rs1    = extract_bits(instruction, 15, 5);
+			u16 imm   = extract_bits(instruction, 20, 12);
+
+			if (funct3 == 0x0)
+				
 
 		}
 		else if (opcode == 0b0100011) // 
@@ -132,8 +152,6 @@ i32 main(i32 argc, byte **argv)
 
 		// execute
 
-
-		running--;
 	}
 
 }
