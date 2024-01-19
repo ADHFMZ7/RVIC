@@ -1,4 +1,4 @@
-#include "macros.h"
+// #include "macros.h"
 
 // int main() {
 //     u32 x2 = -16;
@@ -17,14 +17,13 @@
 //     return 0;
 // }
 //
-#include <stdio.h>
+// #include <stdio.h>
 
 int main() {
-    unsigned int unsignedValue = 4294967295;  // Maximum value for unsigned int
-    unsigned int signedValue = (int)unsignedValue;
 
-    printf("Original unsigned value: %u\n", signedValue);
-    printf("Converted signed value: %d\n", signedValue);
+	int a = 10;
+	int b = 15;
+	int c = a + b;
 
     return 0;
 }

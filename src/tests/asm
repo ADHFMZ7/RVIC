@@ -1,0 +1,16 @@
+addi x2, x2, -32
+sw x8, 28(x2)
+addi x8, x2, 32
+addi x15, x0, 10
+sw x15, -20(x8)
+addi x15, x0, 15
+sw x15, -24(x8)
+lw x14, -20(x8)
+lw x15, -24(x8)
+add x15, x14, x15
+sw x15, -28(x8)
+addi x15, x0, 0
+addi x10, x15, 0
+lw x8, 28(x2)
+addi x2, x2, 32
+jalr x0, 0(x1)
