@@ -15,11 +15,14 @@ typedef struct core
 
 } core;
 
-void dump_registers(core *cpu)
-{
-	for (int i = 0; i < 32; i++){
-		printf("%d: %d\n", i, (i32)cpu->x[i]);
-	}
-}
+void dump_registers(core *cpu);
+
+void dump_memory(core *cpu);
+
+u8 memory_read(core *cpu, u32 address);
+
+void memory_write(core *cpu, u32 address, u8 value);
+
+int load_file(const char *filename, u8 **buffer, u32 *size, u32 startIndex);
 
 #endif
